@@ -1,0 +1,64 @@
+1. 자바 8에서는 메서드를 값처럼, 일급 객체로 취급하는 기능을 제공한다. 이러한 기능을 '메서드 참조'라고 한다.
+
+File[] hiddenFiles = new File(".").listFiles(new FileFilter() {
+public boolean accept(File file) {
+        return file.isHidden();
+     }
+});
+
+위 코드를 보면, 기존에는 매개변수로 메서드를 전달해주기 위해서 다음과 같이 긴 구현체를 함께 선언해서 보내주는 것을 볼 수 있다.
+위 코드를 메서드 참조를 통해서 수정해보자.
+
+# 예제1
+File[] hiddenFiles = new File(".").listFiles(File::isHidden);
+
+# 예제2
+BiFunction<String, String, Boolean> function;
+
+function = (s1, s2) -> s1.equals(s2); 람다식
+function = String.equals; 메소드 참조
+
+Boolean equal = function.apply("Seoul", "New York"); false
+
+다음과 같이 ::를 사용해서 메서드 참조를 구현할 수 있으며, 마치 '값'을 전달하는 것 처럼 간결하게 전달하는 것을 볼 수 있다.
+즉, ::는 '해당 메서드를 값으로 사용하라'는 의미로 볼 수 있다.
+class::methodName -> 메서드 참조
+
+또한, 람다식을 활용하여 메서드를 값처럼 취급할 수 있다. 재사용성이 없고 간단한 코드의 경우 람다를 활용하자.
+
+(int x) -> x + 1;
+
+
+2. 동작 파라미터화 이해하기
+
+동작 파라미터를 알아보기 전에, 간단한 예제를 살펴보자. 아래 예저는 초록색 사과에 대해서 필터링을 진행하는 코드이다.
+
+public static List<Apple> filterGreenApples(List<Apple> inventory){
+    List<Apple> result = new ArrayList<>();
+    for(Apple apple : inventory){
+        if(GREEN.equals(apple.getColor())){
+            result.add(apple);
+        }
+    }
+    return result;
+}
+
+물론, 이렇게 하면 직관적이고 잘 알아볼 수 있다. 하지만, 아래와 같이 적을 수도 있다.
+
+public interface Predicate<T>{
+    boolean test(T t);
+}
+
+public static boolean isGreenApple(Apple apple){
+    return GREEN.equals(apple.getColor());
+}
+
+static List<Apple> filerApples(List<Apple> inventory, Predicate<Apple> p){
+        List<Apple> result = new ArrayList<>();
+        for(Apple apple : inventory){
+            if(p.test(apple)){
+                result.add(apple);
+            }
+        }
+        return result;
+}
