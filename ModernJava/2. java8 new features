@@ -62,3 +62,62 @@ static List<Apple> filerApples(List<Apple> inventory, Predicate<Apple> p){
         }
         return result;
 }
+
+3. 메서드 말고, 람다로 해결해볼래?
+
+메서드로 전달해 주려면, 결국 메서드를 선언해아 한다는 것이다. 하지만, 메서드를 선언한다는 것은 해당 메서드의 네이밍과 위치까지 고려해야하는게 많다.
+그것이 번거롭거나 불필요한 경우에는, '익명함수 / 람다'를 활용하여 바로 다음과 같이 정의해 줄수도 있다.
+
+filterApples(inventory, (Apple apple) -> GREEN.equals(apple.getColor());
+
+이 메서드 하나 안에서 "사과의 색상이 초록색인것만 골라줘"가 바로 드러나는 걸 볼 수 있다. 그러나, 너무 무분별하게 사용하는건 좋지 않다고 생각한다.
+람다 내부의 식이 길어진다면 다른 개발자가 볼때 되려 로직 파악이 힘들어질 수 있기 때문에 메서드로 정의하고 네이밍을 명확하게 하여, 역할을 잘 나타내는 것이 좋을 수도 있다.
+
+
+4. Stream 활용하기
+
+하자민, 위 코드에서도 여전히 불현한 점이 존재한다.
+
+static List<Apple> filerApples(List<Apple> inventory, Predicate<Apple> p){
+    List<Apple> result = new ArrayList<>();
+    for(Apple apple : inventory){
+        if(p.test(apple)){
+            result.add(apple);
+        }
+    }
+    return result;
+}
+
+여기선, for-each를 통해 순회를 하게 되면, 명시적으로 결과를 넣기 위한 List 선언부터 넣어주는 과정까지 직접 선언해줘야 햔다.
+그것이 귀찮은 경우에는, 컬렉션의 for-each 구문으로 통해 각 요소를 반복하면서 작어블 수행하던(외부 반복) 형식에서 벗어나,
+ Stream library 내부에서(내부 반복) 모든 데이터를 처리할 수 있도록 진행해보자.
+
+ // 순차 처리
+ import static java.util.stream.Collectors.toList;
+ 
+ static List<Apple> filerHeavyApples(List<Apple> inventory, Predicate<Apple> p){
+ List<Apple> heavyApples = invertory
+                            .stream()
+                            .filter((Apple appel)-> apple.getWeight() > 150)
+                            .collect(toList());
+
+        return heavyApples;
+}
+
+
+ // 병렬 처리
+ import static java.util.stream.Collectors.toList;
+ 
+ static List<Apple> filerHeavyApples(List<Apple> inventory, Predicate<Apple> p){
+ List<Apple> heavyApples = invertory
+                            .parrallelStream()
+                            .filter((Apple appel)-> apple.getWeight() > 150)
+                            .collect(toList());
+
+        return heavyApples;
+}
+
+
+위와 같이 조건을 작성하고, collect()를 통해서 해당하는 리스트를 바로 얻어올 수 있다. 
+이제, 리스트를 선언하고 add를 통해 직접 추가해주었던 과정이 없어져서 훨씬 간결해졌다. 또한, 컬렉션에서는 크기가 매우 큰 리스트에 대해서
+단순히 for-each를 통해서 처리한다면 시간이 더 걸릴 테지만, stream의 병렬성을 사용하면 더 빠르게 처리할 수 있다는 장점이 있다. 
