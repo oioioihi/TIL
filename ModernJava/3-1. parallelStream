@@ -1,0 +1,85 @@
+
+
+Java에서는 다양한 방법으로 병렬 처리를 만들 수 있습니다. 기본적인 Thread 클래스를 이용할 수 있으며, ExecutorService를 이용하여 쓰레드풀도 쉽게 만들 수 있습니다.
+그리고 CompleteFuture를 이용하면 쓰레드 간의 데이터 동기화, 실행 순서 등도 원하는 대로 조작할 수도 있습니다.
+
+그리고 Java8에서 등장한 Stream은 병렬 처리를 쉽게 사용할 수 있게 메서드를 제공해 줍니다. 만들어 놓은 Stream에 parallel을 추가하기만 하면 되는거죠.
+
+1. Stream 예제1
+
+오늘 사용할 예제는 아래와 같습니다.
+
+메서드를 하나 만들도록 하겠습니다. 해당 메서드는 이름을 파라미터로 받습니다. 메서드는 Person 객체를 만듭니다.
+Person 객체에는 name과 age가 필요합니다. name은 파라미터로 받기 때문에 괜찮지만 age는 외부 API를 통해서 가져와야합니다
+여기서는 간단히 3초의 delay 시간을 주고 Random하게 뽑아내는 것을 하겠습니다. 이렇게 Name과 age를 통해 Person 객체의 List를 반환하는 것이 해당 메서드 입니다.
+
+로직을 구현하기 위해서 먼저 Person 객체를 만듭니다. Person 객체는 name을 파라미터로 받는 생서자를 통해 만들 수 있습니다.
+그리고 나이를 update하는 updateAge라는 메서드를 만들었습니다. 각 멤버 변수를 반환하는 get Method와 객체의 내용을 출력하는 toString 메서도도 있습니다.
+
+public class Person {
+
+    private String name;
+    private Integer age;
+  
+    public Person(String name) {
+      this.name = name;
+    }
+  
+    public String getName() {
+      return name;
+    }
+  
+    public Integer getAge() {
+      return age;
+    }
+  
+    public Person updateAge(Integer age) {
+      this.age = age;
+      return this;
+    }
+  
+    @Override
+    public String toString() {
+      return "Person{" +
+          "name='" + name + '\'' +
+          ", age=" + age +
+          '}';
+    }
+  }
+
+  아래는 Stream을 통해 Person 객체를 만들고 각각을 출력하는 클래스입니다. @Test가 붙은 메서드를 Client 메서드라고 생각해주시면 됩니다.
+  createPerson 메서드에 로직이 들어가 있습니다. 해당 메서드를 보시면 Person 객체를 이름을 통해 먼저 만들고 이름을 통해 findAge 메서드를 통해 가져온 age값을 Person 객체의 age로 넣습니다.
+  그리고 결과르 List<Person>으로 반환해주고 있습니다.
+
+  public class StreamSample {
+
+    private Random ageRandom = new Random();
+
+    @Test
+    public void Test(){
+        List<Person> person = createPerson(
+            Arrays.asList("A","B","C","D"));
+
+        person.forEach(System::println);
+    
+    }
+
+    public List<Person> createPerson(List<String> names){
+        return names.stream()
+        .map(Person::new)
+        .map( person -> person.updateAge(findAge(person.getName())))
+        .collect(Collectors.toList());
+    }
+
+    public Integer findAge(String name){
+        Integer age =  ageRandom.nextInt(name.length() * 3) + 1;
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException ignore) {
+            //TODO: handle exception
+        }
+        return age;
+    }
+  }
+
+// 참고 블로그 : https://sabarada.tistory.com/102
