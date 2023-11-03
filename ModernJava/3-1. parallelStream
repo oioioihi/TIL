@@ -82,4 +82,35 @@ public class Person {
     }
   }
 
+  위 테스트를 진행했을때 4개의 Element에 대해서 각각 3초의 시간이 소모되므로 아래와 같은 결과를 얻을 수 있습니다.
+  => 약 12초 소요
+  이런 결과를 얻은 것을 병렬 스트림을 통해 시간을 줄여보도록 하겠습니다.
+
+  2. 병렬 Stream
+
+  해당 스트림을 병렬 스트림으로 변경해보도록 하겠습니다. 아래 처럼 stream으로 변경 후 parallel 메서드를 붙여주기만 하면 됩니다.
+  이렇게 하면 병렬 처리가 이루어집니다.
+
+  public List<Person> createPerson(List<String> names) {
+      return names.stream()
+      .parallel() //추가된 곳
+      .map(Person::new)
+      .map(person -> person.updateAge(findAge(person.getName())))
+      .collect(Collectors.toList());
+  }
+
+  결과를 확인해 보도록 하겠습니다.
+  => 약 3.19초
+
+  이렇게 끝이 난것 같지만, 조금더 생각해 봐야할 부분이 있습니다. 우리가 실 운영에서 이렇게 모든 Stream을 병렬 스트림으로 변경한다고 하면 정말 큰일이 날 수 있습니다.
+
+  3. 내부 로직 파악
+
+  병렬 Stream은 내부적으로 Java7에 추가된 Fork / Join Framework를 사용합니다. 
+  Fork / Join Framework은 작업을 분할가능할 만큼 쪼개고, 쪼개진 작업을 별도의 work thread를 통해 작업 후 결과를 합치는 과정을 거쳐 결과를 만들어냅니다.
+
+  그리고 병렬 스트림의 Fork / Join Framework의 work thread의 수는 서비스가 돌아가는 서버의 CPU 코어 수에 종속됩니다.
+  즉 개인 PC에서 돌렸을 때 4Core PC라면 thread는 4개로 작업을 진행합니다. Java에서는 Runtime.getRuntime().availableProcessors()으로 CPU Core 숫자가 확인 가능합니다.
+  
+
 // 참고 블로그 : https://sabarada.tistory.com/102
