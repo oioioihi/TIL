@@ -119,4 +119,13 @@ public class Person {
 
   병렬 Stream의 가장 큰 문제는 ThreadPool을 global하게 이용한다는 것입니다. 즉, 모든 병렬 Stream이 동일한 ThreadPool에서 thread를 가져와 사용합니다. 
   이렇게 되면 ThreadPool의 문제점이 발생할 수 있습니다. 잠깐 ThreadPool을 사용할 때의 주의사항을 한번 보고 가도록 하겠습니다.
+
+  4. Thread Pool 사용의 주의사항을
+  
+  Thread Pool은 무분별하게 Thread의 수가 늘어나는 것을 막아줍니다. 필요할 때 빌려주고 사용하지 않으면 반납하여 Thread의 숫자를 유지하는 역할을 합니다. 
+  그런데 만약 Thread를 사용중인 곳에서 아리 이미지 처럼 Thread를 반납하지 않고 계속 점유중이라면 어떻게 될까요?
+
+
+
+
 // 참고 블로그 : https://sabarada.tistory.com/102
