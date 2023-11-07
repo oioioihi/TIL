@@ -126,6 +126,33 @@ public class Person {
   그런데 만약 Thread를 사용중인 곳에서 아리 이미지 처럼 Thread를 반납하지 않고 계속 점유중이라면 어떻게 될까요?
 
 
+  이렇게 되면 Thread 1,2,3은 사용할 수 없으며 Thread 4 한개만을 이용해서 모든 요청을 처리하게 됩니다. 
+  특히, Thread 1,2,3이 sleep과 같이 아무런 일을 하지 않으면서 리소스를 점유하고 있다면 이는 문제가 큽니다.
+  만약 Thread 4까지 점유 중이게 되면 더이상 요청은 처리되지 않고 Thread Pool Queue에 쌓이게 되며 일정치 이상이 되면 요청이 drop 되는 현상까지 발생할 것입니다.
+
+  이러한 Thread Pool을 사용할 때 주의해야할 점은 병렬 Stream을 사용할 경우에도 동일하게 적용 됩니다. 
+  Fork / JoinPool을 서비스에 global하게 적용되기 때문에 만약 A 메서드에서 4개의 thread를 모두 점유하면 다른 병렬 Stream의 요청은 처리되지 않고 대기하게 됩니다.
+
+  5. 커스텀 ForkJoinPool을 이용한 병렬 스트림
+
+  이러한 문제점은 ForkJoinPool을 커스텀하게 제작함으로써 해결할 수 있습니다. 아래 코드는 위 예제에서 createPerson 메서드를 커스텀 ForkJoinPool을 사용하도록 변경한 예제입니다.
+  아래 예제의 결과 3초의 시간이 걸리는 것으로 적용된 것을 알 수 있었습니다.
+
+  ForkJoinPool은 ExcutorService를 AbstractExecutorService를 통해서 상속 받고 있습니다. 
+  따라서 ExecutorService를 사용하듯이 사용해주면 됩니다. 
+
+  public List<Person> createPerson(List<String> nams) throws ExecutionException, InterruptedException{
+    ForkJoinPool pool = new ForkJoinPool();
+
+    return pool.submit(()->{
+      return names.stream()
+      .parallel()
+      .map(Person::new)
+      .map(person -> person.updateAge(findAge(person.getName())))
+      .collect(Collectors.toList());
+    }).get();
+  }
+
 
 
 // 참고 블로그 : https://sabarada.tistory.com/102
