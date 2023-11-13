@@ -82,4 +82,32 @@ public List<Crew> filterCrews(List<Crew> crews, CrewPredicate p){
 
 
 
+2. 리팩터링 진행하기 - 익명클래스
+
+어떻게 하면 이를 개선할 수 있을까? 구현 클래스를 만들지 않고 문제를 해결하는 방법은 없을까? 바로, 클래스의 선언과 인스턴스화를 동시에 
+진행할 할 있는 '익명 클래스'를 활용하는 것이다. 익명 클래스는 '이름이 없는 클래스'이다. 클래스명에 대한 네이밍에 대해 고민할 필요도 없으며,
+네이밍이 없기 때문에 외부에서 호출할수 없어 딱 1번만 사용하게 된다.
+
+
+// 리팩터링 이전의 코드, 기존에는 이런 식으로 클래스를 선언해주었다.
+List<Crew> backendCrews = filterCrews(crews, new BackendCrewPredicate());
+List<Crew> ageCrews = filterCrews(crews, new AgeCrewPredicate());
+
+// 익명 클래스를 활용해보자!
+// CrewPredicate를 구현하는 객체를 만드는 것이다.
+List<Crew> backendCrews = filterCrews(crews, new CrewPredicate(){
+
+    @Override
+    public boolean test(Crew crew){
+        return crew.getCourse.equals(BACKEND);
+    }
+});
+
+List<Crew> ageCrews = filterCrews(crews, new CrewPredicate(){
+
+    @Override
+    public boolean test(Crew crew){
+        return crew.getAge() <= 25;
+    }
+});
 // 원본블로그 : https://cl8d.tistory.com/m/36
