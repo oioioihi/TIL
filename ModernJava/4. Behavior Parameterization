@@ -110,4 +110,23 @@ List<Crew> ageCrews = filterCrews(crews, new CrewPredicate(){
         return crew.getAge() <= 25;
     }
 });
+
+위 코드를 보면, CrewPredicate 인터페이스의 구현체를 바로 인자 내에서 구현한 것을 볼 수 있다.
+그러나, 위 코드 역시 여전히 불편하다. 우리가 필요한 건 내부의 필터링 조건이지만, public boolean test(){}
+와 같이 메서드 선언을 위한 코드가 계속해서 따라 붙는다는 것이다. 앞서 말한 것처럼 재사용하지도 않는다.
+
+3. 리팩터링 진행하기 - 람다
+
+어떻게 하면 더 짧게 줄일 수 있을까?. 우리는, 다른건 다 필요없고 오직 조건에 대한 '동작'만 필요하다.
+test 메서드에 대한 건 별로 알고 싶지 않고, 그냥 'crew.getAge() <= 25'라는 필터링 조건의 행위만 필요한 것이다.
+우리는 이를 해결하기 위해 '람다 표현식'이라는 것을 사용할 수 있다.
+
+// Lambda Functioin
+List<Crew> backendCrews = filterCrews(crews,(Crew crew) -> crew.getCourse.equals(BACKEND));
+List<Crew> ageCrews = filterCrews(crews, (Crew crew) -> crew.getAge() <= 25);
+
+놀랍게도, 불필요한 코드가 제거되고 나니 크루에 대한 조건이 더 명확하게 보이는 것을 볼 수 있다. 
+우리는 현재 '동작'에 대해서 파라미터로 넘겨준 것이다. 우리는 이러한 '동작 파라미터화'를 통해 유연성을 노ㅠ이고, 
+람다를 통해서 코드를 간결하게 작성할 수 있게 되었다~!
+
 // 원본블로그 : https://cl8d.tistory.com/m/36
