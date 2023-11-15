@@ -149,7 +149,35 @@ public static <T> List<T> filter(List<T> list, Predicate<T> p){
     }
     return result;
 }
+ 
 
 이렇게 제네릭을 활용하여 추상화를 하게 되면, 크루뿐만 아니라 코치, 그리고 다른 타입에 대해서도 필터 메서드를 사용할 수 있게 된다.
 우리는 이제 '확장성'까지 갖추게 된 것이다.
-// 원본블로그 : https://cl8d.tistory.com/m/36
+
+
+5. 메서드 참조 vs 람다식
+
+흔히 메서드 참조와 람다식을 많이 비교하여 사용한다. 지난 챕터1에세는 메서드 참조를 다루었는데, 우리는 람다식에서 메서드 참조를
+활용하면 더 짧고 간결하게 코드를 작성할 수 있다. 예를 들어, 위 코드에서 람다식을 활용하여 호출하면 다음고 같이 사용할 수 있다.
+
+public static void main(String[] args) {
+    List<Crew> crews = new ArrayList<>();
+    filter(crews, (Crew crew) -> crew.getAge() <= 25);
+    }
+
+ 하지만, 만약 나이에 대한 '조건을 재사용'하고 싶다면, 그리고 '메서드명을 통해서 명확하게 해당 조건을 나타내고 싶다'면
+ 메서드 참조를 사용하는 것도 하나의 방법이다. 혹은, 람다 내부 구현이 너무 길어지면 메서드로 만드는 것도 하나의 방법이 될수 있다.
+
+ public void main(String[] args) {
+    List<Crew> crews = new ArrayList<>();
+    filter(crews, this::isCrewAgeUnder);
+    }
+
+private boolean isCrewAgeUnder(final Crew crew){
+    return crew.getAge() <= 25;
+}
+
+위와 같이 메서드 참조를 활용하여 여러 번 재사용할 수는 있다.
+
+
+// 원본블로그 : https://cl8d.tistory.com/m/36   
