@@ -180,4 +180,21 @@ private boolean isCrewAgeUnder(final Crew crew){
 위와 같이 메서드 참조를 활용하여 여러 번 재사용할 수는 있다.
 
 
+6. Comparator로 정렬하기
+
+그 외에도, 다양한 활용 예제들이 있다. 대표적으로 Comparator와 Runnable에 대해서 간략하게만 살펴보자.
+자바 8에서 부터 List에는 sort 메서드가 포함되어 있다. (인터페이스에 디폴트 메서드인 sort가 구현되어 있는 형태이다.)
+이때, Comparator 인터페이스를 활용하면 sort의 동작을 다양화할 수 있게 된다.
+
+// 1단계 - Comparator의 구현체 생성하기
+crews.sort(new Comparator<Crew>() {
+    @Override
+    public int compare(Crew o1, Crew o2){
+        return Integer.compare(o1.getAge(), o2.getAge());
+    }
+});
+
+// 2단계 - 람다를 활용하여 간결하게 만들기
+crews.sort((o1,o2)-> Integer.compare(o1.get(),o2.getAge()));
+
 // 원본블로그 : https://cl8d.tistory.com/m/36   
