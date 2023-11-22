@@ -76,5 +76,8 @@ NaturalOrderComparator implements Comparator<Comparable<Object>> {
 Comparator를 기본으로 구현한 Comparator의 구현체인 NaturalOrderComparator를 가져왔다.
 해당 클래스를 보면 위와 같이 compare를 구현한 것을 볼 수 있다.
 
+추상 메서드를 사용하는 이유는, '중복되는 부분, 공통되는 부분'은 미리 만들어져 있는 것을 사용하고, 
+생산하는 쪽에서 이를 받아서 처리할 수 있도록 하기 위함이다. 즉, 생산하는 쪽에서 판단하여 본인에게
+필요한 부분을 재정의할 수 있도록 하기 위해서이다.
 
 // 원본블로그 : https://cl8d.tistory.com/m/36  
