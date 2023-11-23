@@ -90,7 +90,8 @@ private static class ReverseComparator implements Comparator<Comparable<Object>>
 예를 들어, NaturalOrderComparator의 경우 위와 같이 인자로 들어온 c1, c2 순으로 두값을 비교하지만, 
 ReverseComparator의 경우 c2, c1 순으로 값을 비교하는 것을 볼 수 있따.
 
-
+다시 돌아와서 추상 메서드는 abstract 키워드를 붙이며, 끝에 세미콜론(;)을 붙이는 것이 관습이다.
+그러나 인터페이스는 abstract을 생략할 수 있으며, 인터페이스의 모든 메서드는 '추상 메서드'라고 생각하면 된다.
 
 
 
