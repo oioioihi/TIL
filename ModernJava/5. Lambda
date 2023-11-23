@@ -80,4 +80,18 @@ Comparator를 기본으로 구현한 Comparator의 구현체인 NaturalOrderComp
 생산하는 쪽에서 이를 받아서 처리할 수 있도록 하기 위함이다. 즉, 생산하는 쪽에서 판단하여 본인에게
 필요한 부분을 재정의할 수 있도록 하기 위해서이다.
 
+private static class ReverseComparator implements Comparator<Comparable<Object>>, Serializable {
+
+    public int compare(Comparable<Object> c1, Comparable<Object> c2){
+        return c2.compareTo(c1);
+    }
+}
+
+예를 들어, NaturalOrderComparator의 경우 위와 같이 인자로 들어온 c1, c2 순으로 두값을 비교하지만, 
+ReverseComparator의 경우 c2, c1 순으로 값을 비교하는 것을 볼 수 있따.
+
+
+
+
+
 // 원본블로그 : https://cl8d.tistory.com/m/36  
