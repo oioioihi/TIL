@@ -93,6 +93,17 @@ ReverseComparator의 경우 c2, c1 순으로 값을 비교하는 것을 볼 수 
 다시 돌아와서 추상 메서드는 abstract 키워드를 붙이며, 끝에 세미콜론(;)을 붙이는 것이 관습이다.
 그러나 인터페이스는 abstract을 생략할 수 있으며, 인터페이스의 모든 메서드는 '추상 메서드'라고 생각하면 된다.
 
+그렇다면, Child 인터페이스는 함수형 인터페이스라고 할 수 있을까?
 
+public interface Parenet {
+    int hello(int a, int b);
+}
+
+public interaface Child extends Parent {
+    int hello(double a, double b);
+}
+
+-> No, Child 인터페이스를 상속받는다면 Parent인터페이스도 같이 상속이 되서, hello 추상 메서드가 2개가 되기 때문에,
+함수형 인터페이스라고 할 수 없다.
 
 // 원본블로그 : https://cl8d.tistory.com/m/36  
