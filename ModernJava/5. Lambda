@@ -114,7 +114,20 @@ public interaface Child extends Parent {
 "추상 메서드가 1개"라는 것에 주목해야 한다. 람다 표현식을 통해, 이러한 함수형 인터페이스의 인스턴스를 쉽게
 구현할 수 있기 때문이다.
 
+간단하게 Runnable 인터페이스를 사용해보자
 
 
+//익명 클래스를 사용했을 경우
+Runnable r1 = new Rnnable(){
+    @Override
+    public void run(){
+        System.out.println("Anonymous class");
+    }
+};
+
+// 람다를 사용했을 경우
+Runnable r2 = () -> System.out.println("Lambda");
+
+Runnable<T>은 run()이라는 추상 메서드를 1개만 가지고 있는 함수형 인터페이스 이다.
 
 // 원본블로그 : https://cl8d.tistory.com/m/36  
