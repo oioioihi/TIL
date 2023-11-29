@@ -1,0 +1,41 @@
+1. Execute Around
+
+자바 7에서부터 추가된 Try-With-Resources를 활용하면 try에 자원 객체를 전달하고, try 코드 블록이 끝나면
+자동으로 자원을 종료해줄 수 있다. 즉, 모든 catch 블록에 별도의 종료처리를 하거나, finally 블록을 선언하지 않아도 된다.
+이전까지는 항상 자원을 생성하고, 사용하고, 해제할 때에는 아래와 같이 중복되는 코드가 필요했었다.
+
+Resource resource = null;
+
+try{
+    resource = getResource();
+    // 리소스 사용 로직
+}
+catch(){
+    // 예외 처리 로직
+}
+finally{
+    if(resource != null){
+        try {
+            resource.close(); // 자원 할당 해제 -> CG대상
+        }
+        catch(Exception ignored){
+
+        }
+    }
+}
+
+자원 해제를 위해서, 다음과 같이 중복되는 try-catch문이 필요했던 것이다. 그러나, 자바 7에서는
+try-with-resources라는 특징이 추가되어, try에 자원을 전달하게 되면 finally에서 종료 처리를 하지 않아도
+자동으로 자원을 해제해준다.
+
+try(Order order){
+    // 리소스 사용
+}
+catch(){
+
+}
+
+위와 같이 코드가 훨씬 간결해지는 것을 볼 수 있다.
+
+
+// 원본블로그 : https://cl8d.tistory.com/m/36  
