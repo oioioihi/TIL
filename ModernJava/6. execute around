@@ -61,7 +61,19 @@ BufferedReader를 통해서 파일의 한 줄을 읽는 코드이다. 위 코드
 우리는, BufferedReader를 통해 10줄을 읽도록 만들기 위해, processFile() 메서드에게 동작을 전달해주도록 수종할 것이다. 
 동작을 전달해주는 것 , 즉 '동작 파라미터화'를 이용하자는 것이다.
 
+//우리는 이렇게 동작할 수 있도록 만들고 싶다.
 
+String result = processFile(BufferedReader br ->{
+   StringBuilder fileMessage = new StringBuilder();
+   for(int i = 0; i < 10; i++){
+       fileMessage.append(br.readLine());
+   }
+   return fileMessage.toString();
+})
+
+우리는 람다를 활용하여 다음과 같이 10줄을 받아서 처리하도록 만들었다. 처음부터 람다 표현식을 만들었다기 보단,
+10줄을 처리하는 동작 자체를 파라미터로 넘겼다고 보는 것이 더 쉽다. processFile()의 인자로
+10줄을 읽는 동작 자체를 전달해준 것이다. 이렇게 만든 동작 자체를 파라미터화 시켰다면, 이제 이를 바탕으로 함수형 인터페이스를 하나 선언해보자.
 
 
 // 원본블로그 : https://cl8d.tistory.com/m/36  
