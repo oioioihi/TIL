@@ -90,6 +90,9 @@ public String processFile(BufferedReaderProcessor p) throws IOException {
     }
 }
 
+코드를 보면, 인자로 BufferedReaderProcessor 라는 함수형 인터페이스를 받는 것을 볼 수 있다. 이렇게 받은 함수형 인터페이스의
+process() 메서드를 호출하여 실제 동작을 실행할 수 있도록 만들었다. 이제, 우리는 함수형 인터페이스를 사용하지 않고 다시 한 번
+동일한 시그니처를 가진 람다 표현식으로 변경할 수 있다.
 
 
 // 원본블로그 : https://cl8d.tistory.com/m/36  
