@@ -95,4 +95,23 @@ process() 메서드를 호출하여 실제 동작을 실행할 수 있도록 만
 동일한 시그니처를 가진 람다 표현식으로 변경할 수 있다.
 
 
+// 10줄 읽기
+
+String tenLine = processFile((BufferedReader br)->{
+    StringBuilder fileMessage = new StringBuilder();
+    for(int i=0; i<10; i++){
+        fileMessage.append(br.readLine());
+    }
+    return fileMessage.toString();
+});
+
+// 1줄 읽기 
+String oneLine = processFile((BufferedReader br) -> br.readLine());
+
+최종적으로 정리한 코드를 보면, 동작 자체를 람다 표현식으로 전달하여 10줄로 읽든, 1줄로 읽든 자유롭게
+만들 수 있게 되었다. 실행 어라운드 패턴을 활용하여, 실제로 동작을 처리하는 부분에 대해새 파라미터로 넘겨,
+람다 표현식을 활용해 더 간결하게 코드를 작성할 수 있게 되었다. 아래 코드는, 어떤 과정을 코드를 변경하는지 정리하는 부분이다.
+
+
+
 // 원본블로그 : https://cl8d.tistory.com/m/36  
